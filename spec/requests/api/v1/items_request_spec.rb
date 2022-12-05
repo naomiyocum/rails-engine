@@ -103,4 +103,16 @@ describe 'Items API' do
     expect(item.name).to_not eq(previous_name)
     expect(item.name).to eq('Fish Sauce')
   end
+
+  it 'can return the merchant associated with the item' do
+    id = create(:merchant).id
+    item = create(:item, merchant_id: id)
+    
+    get "/api/v1/items/#{item.id}/merchant"
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(merchant[:data][:id]).to eq(id.to_s)
+  end
 end

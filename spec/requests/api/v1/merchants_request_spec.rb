@@ -8,6 +8,7 @@ describe 'Merchants API' do
     merchants = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
     expect(merchants).to be_a(Hash)
     expect(merchants[:data].count).to eq(5)
     expect(merchants[:data]).to be_an(Array)
@@ -34,6 +35,7 @@ describe 'Merchants API' do
     merchant = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
 
     expect(merchant[:data]).to have_key(:id)
     expect(merchant[:data][:id]).to be_a(String)
@@ -60,6 +62,7 @@ describe 'Merchants API' do
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
     expect(items[:data].count).to eq(3)
   end
 end

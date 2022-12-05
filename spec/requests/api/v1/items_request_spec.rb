@@ -8,6 +8,7 @@ describe 'Items API' do
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
     expect(items).to be_a(Hash)
     expect(items[:data].count).to eq(5)
     expect(items[:data]).to be_an(Array)
@@ -43,6 +44,7 @@ describe 'Items API' do
     item = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
 
     expect(item[:data]).to have_key(:id)
     expect(item[:data][:id]).to be_a(String)
@@ -81,9 +83,24 @@ describe 'Items API' do
     created_item = Item.last
    
     expect(response).to be_successful
+    expect(response.status).to eq(201)
     expect(created_item.name).to eq(item_params[:name])
     expect(created_item.description).to eq(item_params[:description])
     expect(created_item.unit_price).to eq(item_params[:unit_price])
     expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+  end
+
+  it 'can update an existing item' do
+    id = create(:item).id
+    previous_name = Item.last.name
+    item_params = { name: 'Fish Sauce' }
+    headers = { "CONTENT_TYPE" => "application/json" }
+
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    item = Item.find_by(id: id)
+
+    expect(response).to be_successful
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq('Fish Sauce')
   end
 end

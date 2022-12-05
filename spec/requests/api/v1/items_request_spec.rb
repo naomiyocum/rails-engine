@@ -104,6 +104,23 @@ describe 'Items API' do
     expect(item.name).to eq('Fish Sauce')
   end
 
+  it 'can delete an item' do
+    item = create(:item)
+
+    expect(Item.count).to eq(1)
+
+    delete "/api/v1/items/#{item.id}"
+
+    expect(response).to be_successful
+    expect(response.status).to eq(204)
+    expect(Item.count).to eq(0)
+    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  xit 'deletes the invoice associated with the deleted item if it was the only item on invoice' do
+
+  end
+
   it 'can return the merchant associated with the item' do
     id = create(:merchant).id
     item = create(:item, merchant_id: id)

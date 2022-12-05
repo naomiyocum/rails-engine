@@ -35,4 +35,35 @@ describe 'Items API' do
       expect(item[:attributes][:merchant_id]).to be_an(Integer)
     end
   end
+
+  it 'can get one item by id' do
+    id = create(:item).id
+
+    get api_v1_item_path(id)
+    item = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+
+    expect(item[:data]).to have_key(:id)
+    expect(item[:data][:id]).to be_a(String)
+
+    expect(item[:data]).to have_key(:type)
+    expect(item[:data][:type]).to be_a(String)
+
+    attributes = item[:data][:attributes]
+    expect(item[:data]).to have_key(:attributes)
+    expect(attributes).to be_a(Hash)
+
+    expect(attributes).to have_key(:name)
+    expect(attributes[:name]).to be_a(String)
+
+    expect(attributes).to have_key(:description)
+    expect(attributes[:description]).to be_a(String)
+
+    expect(attributes).to have_key(:unit_price)
+    expect(attributes[:unit_price]).to be_a(Float)
+
+    expect(attributes).to have_key(:merchant_id)
+    expect(attributes[:merchant_id]).to be_an(Integer)
+  end
 end

@@ -97,16 +97,15 @@ describe 'Merchants API' do
     expect(merchant[:data][:attributes][:name]).to eq('Badda Ring')
   end
 
-  xit 'returns an empty data array if no merchant matches the search term' do
+  it 'returns an empty data array if no merchant matches the search term' do
     create(:merchant, name: 'Badda Ring')
     create(:merchant, name: 'Turing School')
     create(:merchant, name: 'During School')
 
     get '/api/v1/merchants/find?name=blah'
     merchant = JSON.parse(response.body, symbolize_names: true)
-
     expect(response).to be_successful
     expect(response.status).to eq(200)
-    expect(merchant[:data]).to eq([])
+    expect(merchant[:errors]).to be_an(Array)
   end
 end

@@ -189,4 +189,32 @@ describe 'Items API' do
     expect(response.status).to eq(200)
     expect(merchant[:data][:id]).to eq(id.to_s)
   end
+
+  it 'finds all items matching a search term' do
+    create(:item, name: 'Dog toy')
+    create(:item, name: 'dog house')
+    create(:item, name: 'shirt')
+    create(:item, name: 'doggo')
+
+    get '/api/v1/items/find_all?name=dog'
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data].count).to eq(3)
+  end
+
+  it 'returns an empty data array if no item matches the search term' do
+    create(:item, name: 'Dog toy')
+    create(:item, name: 'dog house')
+    create(:item, name: 'shirt')
+    create(:item, name: 'doggo')
+
+    get '/api/v1/items/find_all?name=hello'
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data]).to eq([])
+  end
 end

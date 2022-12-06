@@ -31,6 +31,12 @@ class Api::V1::ItemsController < ApplicationController
     Invoice.all.map {|invoice| invoice.destroy_empty}
     head :no_content
   end
+  
+  def find_all
+    if params[:name]
+      render json: ItemSerializer.new(Item.find_all_name(params[:name]))
+    end
+  end
 
 private
   def item_params

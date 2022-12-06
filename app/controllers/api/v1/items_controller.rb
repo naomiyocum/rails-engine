@@ -29,7 +29,8 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    Item.destroy(params[:id])
+    item = ItemSerializer.new(Item.find(params[:id]))
+    Item.destroy(item)
     head :no_content
   end
 

@@ -159,8 +159,23 @@ describe 'Items API' do
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  xit 'deletes the invoice associated with the deleted item if it was the only item on invoice' do
+  it 'deletes the invoice associated with the deleted item if it was the only item on invoice' do
+    merchant = create(:merchant)
+    customer = create(:customer)
+    item = create(:item, merchant_id: merchant.id)
+    invoice = create(:invoice, merchant_id: merchant.id, customer_id: customer.id)
+    create(:invoice_item, invoice_id: invoice.id, item_id: item.id)
 
+    expect(Invoice.count).to eq(1)
+    expect(invoice.items.count).to eq(1)
+    expect(invoice.present?).to eq(true)
+
+    delete "/api/v1/items/#{item.id}"
+    
+    expect(response).to be_successful
+    expect(response.status).to eq(204)
+    expect(invoice.items.count).to eq(0)
+    expect(Invoice.count).to eq(0)
   end
 
   it 'can return the merchant associated with the item' do

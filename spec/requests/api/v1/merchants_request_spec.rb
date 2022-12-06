@@ -50,6 +50,14 @@ describe 'Merchants API' do
     expect(merchant[:data][:attributes][:name]).to be_a(String)
   end
 
+  it 'returns a 404 status if no merchant is found' do
+    id = create(:merchant, id: 3).id
+
+    get api_v1_merchant_path(2)
+
+    expect(response.status).to eq(404)
+  end
+
   it 'can get all items under a specific merchant id' do
     id_check = create(:merchant).id
     id_rando = create(:merchant).id
@@ -64,5 +72,15 @@ describe 'Merchants API' do
     expect(response).to be_successful
     expect(response.status).to eq(200)
     expect(items[:data].count).to eq(3)
+  end
+
+  it 'returns a 404 status if merchant does not exist' do
+    id_check = create(:merchant, id: 1).id
+
+    create_list(:item, 7, merchant_id: id_check)
+    
+    get api_v1_merchant_items_path(2)
+
+    expect(response.status).to eq(404)
   end
 end

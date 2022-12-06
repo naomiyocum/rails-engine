@@ -1,7 +1,11 @@
 class Api::V1::ItemsController < ApplicationController
   def index
     if params[:merchant_id]
-      render json: ItemSerializer.new(Item.where(merchant_id: params[:merchant_id]))
+      if Merchant.exists?(params[:merchant_id])
+        render json: ItemSerializer.new(Item.where(merchant_id: params[:merchant_id]))
+      else
+        Merchant.find(params[:merchant_id])
+      end
     else
       render json: ItemSerializer.new(Item.all)
     end
@@ -16,7 +20,12 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    render json: ItemSerializer.new(Item.update(params[:id], item_params))
+    if params[:item][:merchant_id]
+      merchant = Merchant.find(params[:item][:merchant_id])
+      render json: ItemSerializer.new(Item.update(params[:id], item_params))
+    else
+      render json: ItemSerializer.new(Item.update(params[:id], item_params))
+    end
   end
 
   def destroy

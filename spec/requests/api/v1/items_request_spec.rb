@@ -69,6 +69,14 @@ describe 'Items API' do
     expect(attributes[:merchant_id]).to be_an(Integer)
   end
 
+  it 'returns a 404 status if no item is found' do
+    id = create(:item, id: 3).id
+
+    get api_v1_item_path(2)
+
+    expect(response.status).to eq(404)
+  end
+
   it 'can create a new item' do
     id = create(:merchant).id
     item_params = ({
@@ -102,6 +110,22 @@ describe 'Items API' do
     expect(response).to be_successful
     expect(item.name).to_not eq(previous_name)
     expect(item.name).to eq('Fish Sauce')
+  end
+
+   it 'returns a 404 status if no merchant is found when updating an item' do
+    merch_id = create(:merchant, id: 1).id
+    id = create(:item, merchant_id: merch_id).id
+    item_params = ({
+      name: 'Mesh Shorts',
+      description: 'Super comfy',
+      unit_price: 19.99,
+      merchant_id: 2
+    })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+
+    expect(response.status).to eq(404)
   end
 
   it 'can delete an item' do

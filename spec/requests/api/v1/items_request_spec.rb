@@ -112,7 +112,25 @@ describe 'Items API' do
     expect(item.name).to eq('Fish Sauce')
   end
 
-   it 'returns a 404 status if no merchant is found when updating an item' do
+  it 'can update an existing item with a found merchant' do
+    merch = create(:merchant, id: 1)
+    id = create(:item, merchant_id: merch.id).id
+    previous_name = Item.last.name
+    item_params = {
+      name: 'Fish Sauce',
+      merchant_id: 1
+    }
+    headers = { "CONTENT_TYPE" => "application/json" }
+
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    item = Item.find_by(id: id)
+
+    expect(response).to be_successful
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq('Fish Sauce')
+  end
+
+  it 'returns a 404 status if no merchant is found when updating an item' do
     merch_id = create(:merchant, id: 1).id
     id = create(:item, merchant_id: merch_id).id
     item_params = ({

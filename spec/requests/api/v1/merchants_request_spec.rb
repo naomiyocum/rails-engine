@@ -108,4 +108,17 @@ describe 'Merchants API' do
     expect(response.status).to eq(200)
     expect(merchant[:data]).to eq({})
   end
+
+  it 'finds all merchants which matches a search term' do
+    create(:merchant, name: 'Badda Ring')
+    create(:merchant, name: 'Turing School')
+    create(:merchant, name: 'During School')
+
+    get '/api/v1/merchants/find_all?name=ring'
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(merchant[:data].count).to eq(3)
+  end
 end

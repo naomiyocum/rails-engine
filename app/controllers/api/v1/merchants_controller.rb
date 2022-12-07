@@ -14,7 +14,7 @@ class Api::V1::MerchantsController < ApplicationController
 
   def find
     if find_one_result == nil
-      render json: ErrorSerializer.new(params[:name]).no_found_merchant
+      render json: {"data" => []}
     else
       render json: MerchantSerializer.new(find_one_result)
     end

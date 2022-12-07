@@ -106,6 +106,6 @@ describe 'Merchants API' do
     merchant = JSON.parse(response.body, symbolize_names: true)
     expect(response).to be_successful
     expect(response.status).to eq(200)
-    expect(merchant[:errors]).to be_an(Array)
+    expect(merchant[:data]).to eq([])
   end
 end

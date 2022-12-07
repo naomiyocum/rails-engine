@@ -204,6 +204,45 @@ describe 'Items API' do
     expect(items[:data].count).to eq(3)
   end
 
+  it 'finds all items that are priced equal to or greater than the min_price' do
+    create(:item, unit_price: 3.99)
+    create(:item, unit_price: 2.99)
+    create(:item, unit_price: 1.99)
+    create(:item, unit_price: 0.99)
+
+    get '/api/v1/items/find_all?min_price=2.00'
+    items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data].count).to eq(2)
+  end
+
+  it 'finds all items that are priced equal to or less than the max_price' do
+    create(:item, unit_price: 3.99)
+    create(:item, unit_price: 2.99)
+    create(:item, unit_price: 1.99)
+    create(:item, unit_price: 0.99)
+
+    get '/api/v1/items/find_all?max_price=2.99'
+    items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data].count).to eq(3)
+  end
+
+  it 'finds all items that are priced within a range' do
+    create(:item, unit_price: 3.99)
+    create(:item, unit_price: 2.99)
+    create(:item, unit_price: 1.99)
+    create(:item, unit_price: 0.99)
+
+    get '/api/v1/items/find_all?max_price=2.99&min_price=1.99'
+    items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data].count).to eq(2)
+  end
+
   it 'returns an empty data array if no item matches the search term' do
     create(:item, name: 'Dog toy')
     create(:item, name: 'dog house')

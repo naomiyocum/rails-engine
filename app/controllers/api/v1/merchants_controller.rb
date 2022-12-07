@@ -13,10 +13,10 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def find
-    if find_one_result == nil
-      render json: {"data" => []}
+    if find_one_result == []
+      render json: {"data" => {}}
     else
-      render json: MerchantSerializer.new(find_one_result)
+      render json: MerchantSerializer.new(find_one_result.first)
     end
   end
 

@@ -9,11 +9,11 @@ class Item < ApplicationRecord
   end
 
   def self.find_all_min(price)
-    where("unit_price >= ?", price)
+    where("unit_price >= ?", price).order(:unit_price)
   end
 
   def self.find_all_max(price)
-    where("unit_price <= ?", price)
+    where("unit_price <= ?", price).order(:unit_price)
   end
 
   def self.find_all_range(min, max)

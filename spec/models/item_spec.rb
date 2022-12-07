@@ -27,7 +27,7 @@ RSpec.describe Item, type: :model do
         item_3 = create(:item, unit_price: 2)
         item_4 = create(:item, unit_price: 0.99)
 
-        expect(Item.find_all_min(4.55)).to eq([item_1, item_2])
+        expect(Item.find_all_min(4.55)).to eq([item_2, item_1])
         expect(Item.find_all_min(100)).to eq([])
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe Item, type: :model do
         item_3 = create(:item, unit_price: 2)
         item_4 = create(:item, unit_price: 0.99)
 
-        expect(Item.find_all_max(99.99)).to eq([item_1, item_2, item_3, item_4])
+        expect(Item.find_all_max(99.99)).to eq([item_4, item_3, item_2, item_1])
         expect(Item.find_all_max(1)).to eq([item_4])
       end
     end

@@ -42,7 +42,7 @@ class Api::V1::ItemsController < ApplicationController
     elsif params[:min_price]
       render json: ItemSerializer.new(Item.find_all_min(params[:min_price]).first)
     elsif params[:max_price]
-      render json: ItemSerializer.new(Item.find_all_max(params[:max_price]).first)
+      render json: ItemSerializer.new(Item.find_all_max(params[:max_price]).last)
     end
   end
   

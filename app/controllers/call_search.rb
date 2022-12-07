@@ -10,6 +10,12 @@ class CallSearch < ApplicationController
       true
     elsif params[:name] == ""
       true
+    elsif params[:max_price] == ""
+      true
+    elsif params[:min_price] == ""
+      true
+    elsif params[:min_price] && params[:max_price] && params[:min_price].to_f > params[:max_price].to_f
+      true
     elsif (params.has_key?(:name) || params.has_key?(:min_price) || params.has_key?(:max_price)) == false
       true
     end

@@ -293,6 +293,24 @@ describe 'Items API' do
     expect(response.status).to eq(400)
   end
 
+  it 'returns a bad request error when max price is empty' do
+    get '/api/v1/items/find?max_price='
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns a bad request error when min price is empty' do
+    get '/api/v1/items/find?min_price='
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns a bad request error if min price is higher than max price' do
+    get '/api/v1/items/find?min_price=100&max_price=3'
+
+    expect(response.status).to eq(400)
+  end
+
   it 'finds one item matching a search term' do
     create(:item, name: 'Dog toy')
     create(:item, name: 'dog house')

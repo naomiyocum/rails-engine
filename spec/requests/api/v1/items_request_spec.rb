@@ -292,4 +292,57 @@ describe 'Items API' do
 
     expect(response.status).to eq(400)
   end
+
+  it 'finds one item matching a search term' do
+    create(:item, name: 'Dog toy')
+    create(:item, name: 'dog house')
+    create(:item, name: 'shirt')
+    create(:item, name: 'doggo')
+
+    get '/api/v1/items/find?name=dog'
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data][:attributes][:name]).to eq('Dog toy')
+  end
+
+  it 'finds one item that is priced equal to or greater than the min_price' do
+    create(:item, unit_price: 3.99)
+    create(:item, unit_price: 2.99)
+    create(:item, unit_price: 1.99)
+    create(:item, unit_price: 0.99)
+
+    get '/api/v1/items/find?min_price=3.00'
+    items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data][:attributes][:unit_price]).to eq(3.99)
+  end
+
+  it 'finds an item that is priced equal to or less than the max_price' do
+    create(:item, unit_price: 3.99)
+    create(:item, unit_price: 2.99)
+    create(:item, unit_price: 1.99)
+    create(:item, unit_price: 0.99)
+
+    get '/api/v1/items/find?max_price=1.00'
+    items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data][:attributes][:unit_price]).to eq(0.99)
+  end
+
+  it 'finds an item that is priced within a range' do
+    create(:item, unit_price: 3.99)
+    create(:item, unit_price: 2.99)
+    create(:item, unit_price: 1.99)
+    create(:item, unit_price: 0.99)
+
+    get '/api/v1/items/find?max_price=3.00&min_price=2.50'
+    items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(items[:data][:attributes][:unit_price]).to eq(2.99)
+  end
 end

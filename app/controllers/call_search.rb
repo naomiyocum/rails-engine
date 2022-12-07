@@ -1,5 +1,5 @@
 class CallSearch < ApplicationController
-  def self.search(params)
+  def self.search_item(params)
     if params[:name] && params[:min_price]
       true
     elsif params[:name] && params[:max_price]
@@ -7,6 +7,18 @@ class CallSearch < ApplicationController
     elsif params[:min_price] && params[:min_price].to_f < 0
       true
     elsif params[:max_price] && params[:max_price].to_f < 0
+      true
+    elsif params[:name] == ""
+      true
+    elsif (params.has_key?(:name) || params.has_key?(:min_price) || params.has_key?(:max_price)) == false
+      true
+    end
+  end
+
+  def self.search_merchant(params)
+    if params[:name] == ""
+      true
+    elsif (params.has_key?(:name)) == false
       true
     end
   end

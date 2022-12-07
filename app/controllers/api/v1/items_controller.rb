@@ -33,7 +33,7 @@ class Api::V1::ItemsController < ApplicationController
   end
   
   def find_all
-    raise ActionController::ParameterMissing.new(params) if CallSearch.search(params)
+    raise ActionController::ParameterMissing.new(params) if CallSearch.search_item(params)
 
     if params[:name]
       render json: ItemSerializer.new(Item.find_all_name(params[:name]))

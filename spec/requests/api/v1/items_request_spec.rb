@@ -280,4 +280,16 @@ describe 'Items API' do
 
     expect(response.status).to eq(400)
   end
+
+  it 'returns a bad request error when query params include name with no value' do
+    get '/api/v1/items/find_all?name='
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns a bad request error when there are no params given' do
+    get '/api/v1/items/find_all?'
+
+    expect(response.status).to eq(400)
+  end
 end

@@ -6,7 +6,7 @@ class Api::V1::ItemsController < ApplicationController
       if Merchant.exists?(params[:merchant_id])
         render json: ItemSerializer.new(Item.where(merchant_id: params[:merchant_id]))
       else
-        render json: ErrorSerializer.new(params[:merchant_id]).no_found_merchant, status: :not_found
+        render json: ErrorSerializer.no_found_merchant(params[:merchant_id]), status: :not_found
       end
     else
       render json: ItemSerializer.new(Item.all)
@@ -33,6 +33,8 @@ class Api::V1::ItemsController < ApplicationController
   end
   
   def find_all
+    raise ActionController::ParameterMissing.new(params) if CallSearch.search(params)
+
     if params[:name]
       render json: ItemSerializer.new(Item.find_all_name(params[:name]))
     elsif params[:min_price] && params[:max_price]

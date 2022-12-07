@@ -256,4 +256,28 @@ describe 'Items API' do
     expect(response.status).to eq(200)
     expect(items[:data]).to eq([])
   end
+
+  it 'returns a bad request error when query params for min_price are less than 0' do
+    get '/api/v1/items/find_all?min_price=-100'
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns a bad request error when query params for max_price are less than 0' do
+    get '/api/v1/items/find_all?max_price=-100'
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns a bad request error when query params include name and min_price' do
+    get '/api/v1/items/find_all?min_price=5&&name=ring'
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns a bad request error when query params include name and max_price' do
+    get '/api/v1/items/find_all?max_price=5&&name=ring'
+
+    expect(response.status).to eq(400)
+  end
 end

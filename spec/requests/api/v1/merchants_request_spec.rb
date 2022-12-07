@@ -8,6 +8,7 @@ describe 'Merchants API' do
     merchants = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
     expect(merchants).to be_a(Hash)
     expect(merchants[:data].count).to eq(5)
     expect(merchants[:data]).to be_an(Array)
@@ -34,6 +35,7 @@ describe 'Merchants API' do
     merchant = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
 
     expect(merchant[:data]).to have_key(:id)
     expect(merchant[:data][:id]).to be_a(String)
@@ -48,6 +50,14 @@ describe 'Merchants API' do
     expect(merchant[:data][:attributes][:name]).to be_a(String)
   end
 
+  it 'returns a 404 status if no merchant is found' do
+    id = create(:merchant, id: 3).id
+
+    get api_v1_merchant_path(2)
+
+    expect(response.status).to eq(404)
+  end
+
   it 'can get all items under a specific merchant id' do
     id_check = create(:merchant).id
     id_rando = create(:merchant).id
@@ -60,6 +70,42 @@ describe 'Merchants API' do
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
+    expect(response.status).to eq(200)
     expect(items[:data].count).to eq(3)
+  end
+
+  it 'returns a 404 status if merchant does not exist' do
+    id_check = create(:merchant, id: 1).id
+
+    create_list(:item, 7, merchant_id: id_check)
+    
+    get api_v1_merchant_items_path(2)
+
+    expect(response.status).to eq(404)
+  end
+
+  it 'finds a single merchant which matches a search term' do
+    create(:merchant, name: 'Badda Ring')
+    create(:merchant, name: 'Turing School')
+    create(:merchant, name: 'During School')
+
+    get '/api/v1/merchants/find?name=ring'
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(merchant[:data][:attributes][:name]).to eq('Badda Ring')
+  end
+
+  it 'returns an empty object if no merchant matches the search term' do
+    create(:merchant, name: 'Badda Ring')
+    create(:merchant, name: 'Turing School')
+    create(:merchant, name: 'During School')
+
+    get '/api/v1/merchants/find?name=blah'
+    merchant = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(merchant[:data]).to eq({})
   end
 end

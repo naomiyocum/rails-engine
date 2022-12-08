@@ -12,7 +12,7 @@ RSpec.describe Merchant, type: :model do
         merch_2 = create(:merchant, name: 'Turing School')
         merch_3 = create(:merchant, name: 'During School')
 
-        expect(Merchant.find_one_name('ring')).to eq([merch_1, merch_2, merch_3])
+        expect(Merchant.find_all('ring')).to eq([merch_1, merch_2, merch_3])
       end
     end
   end

@@ -13,15 +13,23 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def find
-    if find_one_result == []
+    raise ActionController::ParameterMissing.new(params) if CallSearch.search_merchant(params)
+
+    if find_result == []
       render json: {"data" => {}}
     else
-      render json: MerchantSerializer.new(find_one_result.first)
+      render json: MerchantSerializer.new(find_result.first)
     end
   end
 
+  def find_all
+    raise ActionController::ParameterMissing.new(params) if CallSearch.search_merchant(params)
+
+    render json: MerchantSerializer.new(find_result)
+  end
+
 private
-  def find_one_result
-    Merchant.find_one_name(params[:name])
+  def find_result
+    Merchant.find_all(params[:name])
   end
 end

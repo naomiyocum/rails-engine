@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  get '/api/v1/merchants/find', to: 'api/v1/merchants#find'
-  get '/api/v1/merchants/find_all', to: 'api/v1/merchants#find_all'
+  get '/api/v1/merchants/find_all', to: 'api/v1/merchants/search#index'
+  get '/api/v1/merchants/find', to: 'api/v1/merchants/search#show'
+  
 
-  get '/api/v1/items/find', to: 'api/v1/items#find'
-  get '/api/v1/items/find_all', to: 'api/v1/items#find_all'
+  get '/api/v1/items/find', to: 'api/v1/items/search#show'
+  get '/api/v1/items/find_all', to: 'api/v1/items/search#index'
 
   namespace :api do
     namespace :v1 do

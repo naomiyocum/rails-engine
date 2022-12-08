@@ -52,7 +52,21 @@ describe 'Merchants Search API' do
 
   it 'returns a bad request error when there are no params given' do
     get '/api/v1/merchants/find_all?'
+    params = {
 
+    }
+    expect(CallSearch.search_merchant(params)).to eq(true)
     expect(response.status).to eq(400)
+    expect(response.body.include?('errors')).to eq(true)
+  end
+
+  it 'returns a bad request error when there are no params given' do
+    get '/api/v1/merchants/find?'
+    params = {
+
+    }
+    expect(CallSearch.search_merchant(params)).to eq(true)
+    expect(response.status).to eq(400)
+    expect(response.body.include?('errors')).to eq(true)
   end
 end

@@ -10,4 +10,16 @@ class ErrorSerializer
       ]
     }
   end
+
+  def self.invalid_params
+    {
+      'errors': [
+        {
+          "status": "Invalid Params",
+          "message": "Query params are invalid, please try again",
+          "code": 400
+        }
+      ]
+    }
+  end
 end

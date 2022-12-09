@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       resources :merchants, only: %i[index show] do
         resources :items, only: %i[index]
       end
-      resources :items, only: %i[index show create update destroy] do
+      resources :items do
         resource :merchant, only: %i[show]
       end
     end

@@ -1,8 +1,8 @@
 class Api::V1::Items::SearchController < ApplicationController
   def index
-    raise ActionController::ParameterMissing.new(params) if CallSearch.search_item(params)
-
-    if params[:name]
+    if CallSearch.search_item(params)
+      render json: ErrorSerializer.invalid_params, status: :bad_request
+    elsif params[:name]
       render json: ItemSerializer.new(Item.find_all_name(params[:name]))
     elsif params[:min_price] && params[:max_price]
       render json: ItemSerializer.new(Item.find_all_range(params[:min_price], params[:max_price]))
@@ -14,9 +14,9 @@ class Api::V1::Items::SearchController < ApplicationController
   end
 
   def show
-    raise ActionController::ParameterMissing.new(params) if CallSearch.search_item(params)
-
-    if params[:name]
+    if CallSearch.search_item(params)
+      render json: ErrorSerializer.invalid_params, status: :bad_request
+    elsif params[:name]
       render json: ItemSerializer.new(Item.find_all_name(params[:name]).first)
     elsif params[:min_price] && params[:max_price]
       render json: ItemSerializer.new(Item.find_all_range(params[:min_price], params[:max_price]).first)

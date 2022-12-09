@@ -1,14 +1,16 @@
 class Api::V1::Merchants::SearchController < ApplicationController
   def index
-    raise ActionController::ParameterMissing.new(params) if CallSearch.search_merchant(params)
-
-    render json: MerchantSerializer.new(find_result)
+    if CallSearch.search_merchant(params)
+      render json: ErrorSerializer.invalid_params, status: :bad_request
+    else
+      render json: MerchantSerializer.new(find_result)
+    end
   end
 
   def show
-    raise ActionController::ParameterMissing.new(params) if CallSearch.search_merchant(params)
-
-    if find_result == []
+    if CallSearch.search_merchant(params)
+      render json: ErrorSerializer.invalid_params, status: :bad_request
+    elsif find_result == []
       render json: {"data" => {}}
     else
       render json: MerchantSerializer.new(find_result.first)

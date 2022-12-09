@@ -22,22 +22,22 @@ RSpec.describe Item, type: :model do
 
     describe '.find_all_min' do
       it 'returns all items that are priced equal to or greater than the min price' do
-        item_1 = create(:item, unit_price: 99.99)
-        item_2 = create(:item, unit_price: 20)
-        item_3 = create(:item, unit_price: 2)
-        item_4 = create(:item, unit_price: 0.99)
+        item_1 = create(:item, name: 'Apple', unit_price: 99.99)
+        item_2 = create(:item, name: 'Banana', unit_price: 20)
+        item_3 = create(:item, name: 'Cucumber', unit_price: 2)
+        item_4 = create(:item, name: 'Daikon', unit_price: 0.99)
 
-        expect(Item.find_all_min(4.55)).to eq([item_2, item_1])
+        expect(Item.find_all_min(4.55)).to eq([item_1, item_2])
         expect(Item.find_all_min(100)).to eq([])
       end
     end
 
     describe '.find_all_max' do
       it 'returns all items that are priced equal to or less than the max price' do
-        item_1 = create(:item, unit_price: 99.99)
-        item_2 = create(:item, unit_price: 20)
-        item_3 = create(:item, unit_price: 2)
-        item_4 = create(:item, unit_price: 0.99)
+        item_1 = create(:item, name: 'Zebra',unit_price: 99.99)
+        item_2 = create(:item, name: 'Yo-yo',unit_price: 20)
+        item_3 = create(:item, name: 'X-ray',unit_price: 2)
+        item_4 = create(:item, name: 'Whale',unit_price: 0.99)
 
         expect(Item.find_all_max(99.99)).to eq([item_4, item_3, item_2, item_1])
         expect(Item.find_all_max(1)).to eq([item_4])

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'Merchants Search API' do
-
   it 'finds a single merchant which matches a search term' do
     create(:merchant, name: 'Badda Ring')
     create(:merchant, name: 'Turing School')
@@ -43,7 +44,7 @@ describe 'Merchants Search API' do
   it 'returns a bad request error when query params include name with no value' do
     get '/api/v1/items/find_all?name='
     params = {
-      name: ""
+      name: ''
     }
 
     expect(CallSearch.search_merchant(params)).to eq(true)
@@ -52,9 +53,7 @@ describe 'Merchants Search API' do
 
   it 'returns a bad request error when there are no params given' do
     get '/api/v1/merchants/find_all?'
-    params = {
-
-    }
+    params = {}
     expect(CallSearch.search_merchant(params)).to eq(true)
     expect(response.status).to eq(400)
     expect(response.body.include?('errors')).to eq(true)
@@ -62,9 +61,7 @@ describe 'Merchants Search API' do
 
   it 'returns a bad request error when there are no params given' do
     get '/api/v1/merchants/find?'
-    params = {
-
-    }
+    params = {}
     expect(CallSearch.search_merchant(params)).to eq(true)
     expect(response.status).to eq(400)
     expect(response.body.include?('errors')).to eq(true)

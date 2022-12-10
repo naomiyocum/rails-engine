@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class ErrorSerializer
   def self.no_found_merchant(search)
     {
       'errors': [
         {
-          "status": "NOT FOUND",
+          "status": 'NOT FOUND',
           "message": "No merchants found by the name #{search}",
           "code": 404
         }
@@ -15,8 +17,8 @@ class ErrorSerializer
     {
       'errors': [
         {
-          "status": "Invalid Params",
-          "message": "Query params are invalid, please try again",
+          "status": 'Invalid Params',
+          "message": 'Query params are invalid, please try again',
           "code": 400
         }
       ]

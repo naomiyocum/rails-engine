@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Item, type: :model do
   describe 'relationships' do
     it { is_expected.to belong_to(:merchant) }
-    it { is_expected.to have_many(:invoice_items)}
-    it { is_expected.to have_many(:invoices).through(:invoice_items)}
-    it { is_expected.to have_many(:transactions).through(:invoices)}
+    it { is_expected.to have_many(:invoice_items) }
+    it { is_expected.to have_many(:invoices).through(:invoice_items) }
+    it { is_expected.to have_many(:transactions).through(:invoices) }
   end
 
   describe 'class methods' do
@@ -34,10 +36,10 @@ RSpec.describe Item, type: :model do
 
     describe '.find_all_max' do
       it 'returns all items that are priced equal to or less than the max price' do
-        item_1 = create(:item, name: 'Zebra',unit_price: 99.99)
-        item_2 = create(:item, name: 'Yo-yo',unit_price: 20)
-        item_3 = create(:item, name: 'X-ray',unit_price: 2)
-        item_4 = create(:item, name: 'Whale',unit_price: 0.99)
+        item_1 = create(:item, name: 'Zebra', unit_price: 99.99)
+        item_2 = create(:item, name: 'Yo-yo', unit_price: 20)
+        item_3 = create(:item, name: 'X-ray', unit_price: 2)
+        item_4 = create(:item, name: 'Whale', unit_price: 0.99)
 
         expect(Item.find_all_max(99.99)).to eq([item_4, item_3, item_2, item_1])
         expect(Item.find_all_max(1)).to eq([item_4])

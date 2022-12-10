@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
   describe 'relationships' do
-    it {is_expected.to belong_to(:customer)}
-    it {is_expected.to have_many(:transactions)}
-    it {is_expected.to have_many(:invoice_items)}
-    it {is_expected.to have_many(:items).through(:invoice_items)}
+    it { is_expected.to belong_to(:customer) }
+    it { is_expected.to have_many(:transactions) }
+    it { is_expected.to have_many(:invoice_items) }
+    it { is_expected.to have_many(:items).through(:invoice_items) }
   end
 
   describe 'instance methods' do
@@ -27,7 +29,7 @@ RSpec.describe Invoice, type: :model do
         expect(Invoice.count).to eq(3)
 
         Item.destroy(item_1.id)
-        Invoice.all.map {|invoice| invoice.destroy_empty}
+        Invoice.all.map(&:destroy_empty)
         expect(Invoice.count).to eq(2)
       end
     end

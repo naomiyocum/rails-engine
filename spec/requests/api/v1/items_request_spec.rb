@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'Items API' do
@@ -12,7 +14,7 @@ describe 'Items API' do
     expect(items).to be_a(Hash)
     expect(items[:data].count).to eq(5)
     expect(items[:data]).to be_an(Array)
-    
+
     items[:data].each do |item|
       expect(item).to have_key(:id)
       expect(item[:id]).to be_a(String)
@@ -79,17 +81,17 @@ describe 'Items API' do
 
   it 'can create a new item' do
     id = create(:merchant).id
-    item_params = ({
+    item_params = {
       name: 'Mesh Shorts',
       description: 'Super comfy',
       unit_price: 19.99,
       merchant_id: id
-    })
-    headers = {"CONTENT_TYPE" => "application/json"}
+    }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
     post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
     created_item = Item.last
-   
+
     expect(response).to be_successful
     expect(response.status).to eq(201)
     expect(created_item.name).to eq(item_params[:name])
@@ -102,9 +104,9 @@ describe 'Items API' do
     id = create(:item).id
     previous_name = Item.last.name
     item_params = { name: 'Fish Sauce' }
-    headers = { "CONTENT_TYPE" => "application/json" }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({ item: item_params })
     item = Item.find_by(id: id)
 
     expect(response).to be_successful
@@ -120,9 +122,9 @@ describe 'Items API' do
       name: 'Fish Sauce',
       merchant_id: 1
     }
-    headers = { "CONTENT_TYPE" => "application/json" }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({ item: item_params })
     item = Item.find_by(id: id)
 
     expect(response).to be_successful
@@ -133,15 +135,15 @@ describe 'Items API' do
   it 'returns a 404 status if no merchant is found when updating an item' do
     merch_id = create(:merchant, id: 1).id
     id = create(:item, merchant_id: merch_id).id
-    item_params = ({
+    item_params = {
       name: 'Mesh Shorts',
       description: 'Super comfy',
       unit_price: 19.99,
       merchant_id: 2
-    })
-    headers = {"CONTENT_TYPE" => "application/json"}
+    }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({ item: item_params })
 
     expect(response.status).to eq(404)
   end
@@ -156,7 +158,7 @@ describe 'Items API' do
     expect(response).to be_successful
     expect(response.status).to eq(204)
     expect(Item.count).to eq(0)
-    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect { Item.find(item.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   it 'deletes the invoice associated with the deleted item if it was the only item on invoice' do
@@ -171,7 +173,7 @@ describe 'Items API' do
     expect(invoice.present?).to eq(true)
 
     delete "/api/v1/items/#{item.id}"
-    
+
     expect(response).to be_successful
     expect(response.status).to eq(204)
     expect(invoice.items.count).to eq(0)
@@ -181,7 +183,7 @@ describe 'Items API' do
   it 'can return the merchant associated with the item' do
     id = create(:merchant).id
     item = create(:item, merchant_id: id)
-    
+
     get "/api/v1/items/#{item.id}/merchant"
     merchant = JSON.parse(response.body, symbolize_names: true)
 

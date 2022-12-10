@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'Items Search API' do
-
   it 'finds all items matching a search term' do
     create(:item, name: 'Dog toy')
     create(:item, name: 'dog house')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'Merchants API' do
@@ -12,7 +14,7 @@ describe 'Merchants API' do
     expect(merchants).to be_a(Hash)
     expect(merchants[:data].count).to eq(5)
     expect(merchants[:data]).to be_an(Array)
-    
+
     merchants[:data].each do |merchant|
       expect(merchant).to have_key(:id)
       expect(merchant[:id]).to be_a(String)
@@ -64,7 +66,7 @@ describe 'Merchants API' do
 
     create_list(:item, 3, merchant_id: id_check)
     create_list(:item, 7, merchant_id: id_rando)
-    
+
     get api_v1_merchant_items_path(id_check)
 
     items = JSON.parse(response.body, symbolize_names: true)
@@ -78,7 +80,7 @@ describe 'Merchants API' do
     id_check = create(:merchant, id: 1).id
 
     create_list(:item, 7, merchant_id: id_check)
-    
+
     get api_v1_merchant_items_path(2)
 
     expect(response.status).to eq(404)

@@ -1,24 +1,37 @@
-# README
+# Rails Engine
+![GitHub top language](https://img.shields.io/github/languages/top/naomiyocum/rails-engine?color=yellow)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Table of Contents
+* [General Info](#general-info)
+* [Learning Goals](#learning-goals)
+* [Technologies](#technologies)
+* [Usage](#usage)
+* [API Endpoints](#api-endpoints)
 
-Things you may want to cover:
+## General Info
 
-* Ruby version
+## Learning Goals
+- Expose an API
+- Use serializers to format JSON responses
+- Test API exposure
+- Use SQL and AR to gather data
 
-* System dependencies
+## Technologies
+- Ruby 2.7.4
+- Rails 5.2.8
 
-* Configuration
+## Usage
 
-* Database creation
+Clone the repo by running `git clone` with the copied URL onto your local machine
 
-* Database initialization
+Then, run the following commands:
+```
+cd rails-engine
+bundle install
+rails db:{drop,create,migrate,seed}
+rails s
+```
 
-* How to run the test suite
+Lastly, head to your web browser or Postman. The base URL is `localhost:3000` and endpoints are listed below.
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## API Endpoints
